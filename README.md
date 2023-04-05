@@ -5,7 +5,7 @@
 In order to run the python file, we need first to specify Flask where should find the application.
 
 ```commandline
-export FLASK_APP=hello
+export FLASK_APP=fruits_app
 ```
 
 As we are running the application locally we need to specify to Flask also that should run it in development mode. 
