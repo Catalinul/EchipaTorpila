@@ -23,3 +23,25 @@ flask run
 ### Test the application
 
 to be continued
+
+
+### Run the app in a docker container
+
+pipeline.py can be used to build/build/push/deploy/test the application with Docker.
+You can use it in the following ways:
+
+```commandline
+python pipeline.py BUILD --dockerFilePath=<arg1> --imageName=<arg2> --imageTag=<arg3>
+```
+
+```commandline
+python pipeline.py DEPLOY --flavour=[docker/kubernetes] --imageName=<arg2> --imageTag=<arg3>
+```
+
+```commandline
+python pipeline.py PUSH --containerRegistryUsername=<arg1> --imageName=<arg2> --imageTag=<arg3>
+```
+
+```commandline
+python pipeline.py TEST --endpoint=<URL>
+```
