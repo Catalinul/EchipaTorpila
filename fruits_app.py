@@ -13,6 +13,9 @@ DATA_FILE_PATH = 'data.json'
 def liveness():
     return "hello dev school"
 
+@app.route('/')
+def hello():
+    return '<h1> Echipa Torpila :) :) :)</h1>'
 
 def fetch_data():
     response = requests.get(API_BASE_URL)# EchipaTorpila

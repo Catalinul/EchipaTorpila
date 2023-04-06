@@ -47,7 +47,7 @@ elif args.command == 'deploy':
     image_name = args.imageName
     image_tag = args.imageTag
     if flavour == 'docker':
-        subprocess.run(['docker', 'run', '-d', '-p', '5000:5000', f"{image_name}:{image_tag}"])
+        subprocess.run(['docker', 'run', '-d', '-p', '5050:5000', f"{image_name}:{image_tag}"])
     elif flavour == 'kubernetes':
         # TBD
         pass
