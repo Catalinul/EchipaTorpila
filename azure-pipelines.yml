@@ -44,7 +44,7 @@ stages:
     #       $(tag)
         - script: |
             # Get the login credentials for the Azure Container Registry
-            credentials=$(az acr show-credentials --name $(containerRegistry))
+            credentials=$(az acr credential show --name $(containerRegistry))
 
             # Extract the username from the login credentials
             username=$(echo $credentials | jq -r '.username')
