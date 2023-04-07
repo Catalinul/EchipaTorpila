@@ -42,5 +42,5 @@ stages:
       inputs:
         azureSubscription: 'svc-torpila'
         scriptLocation: 'inlineScript'
-        inlineScript: 'az login'
+        inlineScript: 'az login --identity'
         scriptType: 'bash'
