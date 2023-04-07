@@ -40,6 +40,6 @@ stages:
     - task: AzureCLI@2
       displayName: 'Login to Azure'
       inputs:
-        azureSubscription: 'b506259f-3894-40e9-9a42-7aa20443ad77'
+        azureSubscription: 'svc-torpila'
         scriptLocation: 'inlineScript'
         inlineScript: 'az login'
