@@ -25,46 +25,30 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-# - stage: Build
-#   displayName: Build and push stage
-#   jobs:
-#   - job: Build
-#     displayName: Build
-#     pool:
-#       vmImage: $(vmImageName)
-#     steps:
-#     - task: Docker@2
-#       displayName: Build and push an image to container registry
-#       inputs:
-#         command: buildAndPush
-#         repository: $(imageRepository)
-#         dockerfile: $(dockerfilePath)
-#         containerRegistry: $(dockerRegistryServiceConnection)
-#         tags: |
-#           $(tag)
-
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
+- stage: Build
+  displayName: Build and push stage
   jobs:
-  - job: Deploy
-    displayName: Deploy to Azure Container Instances
+  - job: Build
+    displayName: Build
     pool:
       vmImage: $(vmImageName)
     steps:
-    - task: AzureCLI@2
-      displayName: 'Azure CLI Login'
-      inputs:
-        azureSubscription: $(azureSubscriptionName)
-        scriptType: 'bash'
-        scriptLocation: inlineScript
-    - script: |
-        credentials=$(az acr show-credentials --name <registry_name>)
-        username=$(echo $credentials | jq -r '.username')
-        servicePrincipalName=$(az ad sp list --display-name $username --query '[0].displayName' -o tsv)
-        docker login <registry_name>.azurecr.io --username $servicePrincipalName --password $(echo $credentials | jq -r '.passwords[0].value')
-      displayName: 'Login to Azure Container Registry'
-    - script: |
-        az container create --name $(containerInstanceName) --resource-group $(resourceGroupName) --image $(containerRegistry)/$(imageRepository):$(tag) --registry-login-server $(containerRegistry) --registry-username $(containerRegistryUsername) --registry-password $(containerRegistryPassword) --ip-address public
-      displayName: 'Create Container Instance'
+    # - task: Docker@2
+    #   displayName: Build and push an image to container registry
+    #   inputs:
+    #     command: buildAndPush
+    #     repository: $(imageRepository)
+    #     dockerfile: $(dockerfilePath)
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+    #     tags: |
+    #       $(tag)
+        - task: AzureCLI@2
+          displayName: 'Login to Azure'
+          inputs:
+            azureSubscription: 'svc-torpila'
+            scriptLocation: 'inlineScript'
+            inlineScript: 'az login'
+            scriptType: 'bash'
+
+
 
