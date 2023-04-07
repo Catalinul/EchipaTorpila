@@ -72,7 +72,7 @@ stages:
                   --registry-username $(containerRegistryUsername) \
                   --registry-password $(containerRegistryPassword) \
                   --dns-name-label mycontainer1998 \
-                  --ip-address public --port 80
+                  --ip-address public --ports 5000
         
 
 
