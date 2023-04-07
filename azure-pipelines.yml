@@ -15,6 +15,9 @@ variables:
   containerRegistry: 'rgtorpila.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
+  azureSubscriptionName: 'svc-torpila'
+  resourceGroupName: 'resourcegroup-test'
+
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -37,10 +40,21 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    displayName: Deploy to Azure Container Instances
+    pool:
+      vmImage: $(vmImageName)
+    steps:
     - task: AzureCLI@2
-      displayName: 'Login to Azure'
+      displayName: 'Azure CLI Login'
       inputs:
-        azureSubscription: 'svc-torpila'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az login --identity'
+        azureSubscription: $(azureSubscriptionName)
         scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'docker login $(containerRegistry).azurecr.io --username rgtorpila --password sbDWXd/0U3QxboWZRGcyx6Khm+ftjgeq506fawYf/3+ACRCphr0T'
+
