@@ -69,8 +69,8 @@ stages:
                   --cpu 1 \
                   --memory 1 \
                   --registry-login-server $(containerRegistry) \
-                  --registry-username $(dockerRegistryServiceConnection.username) \
-                  --registry-password $(dockerRegistryServiceConnection.passwords.docker) \
+                  --registry-username $(containerRegistryUsername) \
+                  --registry-password $(containerRegistryPassword) \
                   --dns-name-label mycontainer2222 \
                   --ports 80
         
