@@ -58,7 +58,7 @@ stages:
         azureSubscription: $(azureSubscriptionName)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'docker login $(containerRegistry) --username $(containerRegistryUsername) --password $(containerRegistryPassword)'
+        inlineScript: 'az acr login --name $(containerRegistry) --access-token $(containerRegistryPassword)'
     - script: |
         az container create --name $(containerInstanceName) --resource-group $(resourceGroupName) --image $(containerRegistry)/$(imageRepository):$(tag) --registry-login-server $(containerRegistry) --registry-username $(containerRegistryUsername) --registry-password $(containerRegistryPassword) --ip-address public
       displayName: 'Create Container Instance'
