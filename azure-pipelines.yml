@@ -19,7 +19,7 @@ variables:
   tag: '$(Build.BuildId)'
   azureSubscriptionName: 'svc-torpila'
   resourceGroupName: 'resourcegroup-test'
-
+  containerInstanceName: 'container-test'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -59,4 +59,14 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: 'docker login $(containerRegistry) --username $(containerRegistryUsername) --password $(containerRegistryPassword)'
+    - script: |
+        az container create --name $(containerInstanceName) --resource-group $(resourceGroupName) --image $(containerRegistry)/$(imageRepository):$(tag) --registry-login-server $(containerRegistry) --registry-username $(containerRegistryUsername) --registry-password $(containerRegistryPassword) --ip-address public
+      displayName: 'Create Container Instance'
+    - script: |
+        az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query ipAddress.ip --output tsv
+      displayName: 'Get IP Address'
+      id: getip
+    - script: |
+        echo Container is running at $(getip.outputs['getip'])
+      displayName: 'Print IP Address'
 
