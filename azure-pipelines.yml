@@ -57,8 +57,12 @@ stages:
       inputs:
         azureSubscription: $(azureSubscriptionName)
         scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az acr login --name $(containerRegistry) --access-token $(containerRegistryPassword)'
+    - script: |
+        credentials=$(az acr show-credentials --name <registry_name>)
+        username=$(echo $credentials | jq -r '.username')
+        servicePrincipalName=$(az ad sp list --display-name $username --query '[0].displayName' -o tsv)
+        docker login <registry_name>.azurecr.io --username $servicePrincipalName --password $(echo $credentials | jq -r '.passwords[0].value')
+      displayName: 'Login to Azure Container Registry'
     - script: |
         az container create --name $(containerInstanceName) --resource-group $(resourceGroupName) --image $(containerRegistry)/$(imageRepository):$(tag) --registry-login-server $(containerRegistry) --registry-username $(containerRegistryUsername) --registry-password $(containerRegistryPassword) --ip-address public
       displayName: 'Create Container Instance'
