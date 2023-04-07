@@ -71,8 +71,8 @@ stages:
                   --registry-login-server $(containerRegistry) \
                   --registry-username $(containerRegistryUsername) \
                   --registry-password $(containerRegistryPassword) \
-                  --dns-name-label mycontainer2222 \
-                  --ports 80
+                  --dns-name-label mycontainer1998 \
+                  --ports 80:5000
         
 
 
