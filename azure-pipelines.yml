@@ -42,13 +42,19 @@ stages:
     #     containerRegistry: $(dockerRegistryServiceConnection)
     #     tags: |
     #       $(tag)
-        - task: AzureCLI@2
-          displayName: 'Login to Azure'
-          inputs:
-            azureSubscription: 'svc-torpila'
-            scriptLocation: 'inlineScript'
-            inlineScript: 'az login'
-            scriptType: 'bash'
+        - script: |
+            # Get the login credentials for the Azure Container Registry
+            credentials=$(az acr show-credentials --name $(containerRegistry))
+
+            # Extract the username from the login credentials
+            username=$(echo $credentials | jq -r '.username')
+
+            # Use the username to get the name of the service principal
+            servicePrincipalName=$(az ad sp list --display-name $username --query '[0].displayName' -o tsv)
+
+            # Log in to the Azure Container Registry using the service principal name
+            docker login $(containerRegistry).azurecr.io --username $servicePrincipalName --password $(echo $credentials | jq -r '.passwords[0].value')
+          displayName: 'Login to Azure Container Registry'
 
 
 
