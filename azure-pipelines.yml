@@ -13,6 +13,8 @@ variables:
   dockerRegistryServiceConnection: '4851eccd-26ec-4ee2-a63e-d2e090506cf9'
   imageRepository: 'torpilaflaskapp'
   containerRegistry: 'rgtorpila.azurecr.io'
+  containerRegistryUsername: 'rgtorpila'
+  containerRegistryPassword: 'sbDWXd/0U3QxboWZRGcyx6Khm+ftjgeq506fawYf/3+ACRCphr0T'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
   azureSubscriptionName: 'svc-torpila'
@@ -56,5 +58,5 @@ stages:
         azureSubscription: $(azureSubscriptionName)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: 'docker login $(containerRegistry).azurecr.io --username rgtorpila --password sbDWXd/0U3QxboWZRGcyx6Khm+ftjgeq506fawYf/3+ACRCphr0T'
+        inlineScript: 'docker login $(containerRegistry) --username $(containerRegistryUsername) --password $(containerRegistryPassword)'
 
