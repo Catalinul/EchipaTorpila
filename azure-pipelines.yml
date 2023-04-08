@@ -72,6 +72,38 @@ stages:
                   --registry-password $(rgtorpila-cr-secret) \
                   --dns-name-label echipatorpila \
                   --ip-address public --ports 5000
+
+- stage: Check_Liveness
+  dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+  - job: Send_Curl_Request
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Retrieve container IP and port'
+      inputs:
+        azureSubscription: $(azureSubscriptionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          container=$(az container show \
+            --resource-group $(resourceGroupName) \
+            --name $(containerInstanceName) \
+            --query ipAddress.ip --output tsv)
+          port=$(az container show \
+            --resource-group $(resourceGroupName) \
+            --name $(containerInstanceName) \
+            --query ipAddress.ports[0].port --output tsv)
+          echo "Container URL: http://$container:$port"
+
+    - task: Curl@2
+      displayName: 'Send curl request to liveness endpoint'
+      inputs:
+        command: 'GET'
+        arguments: '-I http://$(container):$(port)/liveness'
+        failOnStdErr: true
+        expectedStatusCodes: '200'
+
         
 
 
