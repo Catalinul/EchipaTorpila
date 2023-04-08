@@ -9,8 +9,6 @@ resources:
 - repo: self
 
 variables:
-  # Container registry service connection established during pipeline creation
-  #dockerRegistryServiceConnection: '4851eccd-26ec-4ee2-a63e-d2e090506cf9' #this one got populated automatically when I used the assistant
   dockerRegistryServiceConnection: 'rgtorpila'
   imageRepository: 'torpilaflaskapp'
   containerRegistry: 'rgtorpila.azurecr.io'
