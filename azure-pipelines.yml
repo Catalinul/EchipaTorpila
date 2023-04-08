@@ -78,8 +78,8 @@ stages:
 
 - stage: Test
   displayName: Test stage
-  dependsOn: Deploy
-  condition: succeeded()
+  #dependsOn: Deploy
+  #condition: succeeded()
   jobs:
   - job: GetContainerLocation
     displayName: 'Get container location'
