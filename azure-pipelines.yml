@@ -96,13 +96,15 @@ stages:
             --query ipAddress.ports[0].port --output tsv)
           echo "Container URL: http://$container:$port"
 
-    - task: Curl@2
-      displayName: 'Send curl request to liveness endpoint'
+   
+    - task: PowerShell@2
+      displayName: 'Send HTTP request to liveness endpoint'
       inputs:
-        command: 'GET'
-        arguments: '-I http://$(container):$(port)/liveness'
-        failOnStdErr: true
-        expectedStatusCodes: '200'
+        targetType: 'inline'
+        script: |
+          $uri = 'http://$(container):$(port)/liveness'
+          Invoke-WebRequest -Uri $uri
+    continueOnError: false
 
         
 
