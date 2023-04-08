@@ -14,7 +14,6 @@ variables:
   imageRepository: 'torpilaflaskapp'
   containerRegistry: 'rgtorpila.azurecr.io'
   containerRegistryUsername: 'rgtorpila'
-  containerRegistryPassword: 'sbDWXd/0U3QxboWZRGcyx6Khm+ftjgeq506fawYf/3+ACRCphr0T'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
   azureSubscriptionName: 'svc-torpila'
@@ -73,7 +72,7 @@ stages:
                   --registry-login-server $(containerRegistry) \
                   --registry-username $(containerRegistryUsername) \
                   --registry-password $(rgtorpila-cr-secret) \
-                  --dns-name-label mycontainer1998 \
+                  --dns-name-label echipatorpila \
                   --ip-address public --ports 5000
         
 
