@@ -17,6 +17,7 @@ variables:
   azureSubscriptionName: 'svc-torpila'
   resourceGroupName: 'resourcegroup-test'
   containerInstanceName: 'container-test'
+  dnsLabelName: 'echipa-torpila'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -70,7 +71,7 @@ stages:
                   --registry-login-server $(containerRegistry) \
                   --registry-username $(secret-CRusername) \
                   --registry-password $(rgtorpila-cr-secret) \
-                  --dns-name-label echipatorpila \
+                  --dns-name-label $(dnsLabelName) \
                   --ip-address public --ports 5000
 
 - stage: Check_Liveness
@@ -102,8 +103,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $uri = 'http://$(container):$(port)/liveness'
-          Invoke-WebRequest -Uri $uri
+          Invoke-WebRequest 'http://$(container):$(port)/liveness'
     continueOnError: false
 
         
