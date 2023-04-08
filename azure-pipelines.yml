@@ -96,6 +96,7 @@ stages:
             containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
             echo "##vso[task.setvariable variable=containerLocation]$containerLocation"
   - job: Test_Liveness
+    dependsOn: GetContainerLocation
     displayName: Test liveness endpoint
     pool:
       vmImage: 'ubuntu-latest'
