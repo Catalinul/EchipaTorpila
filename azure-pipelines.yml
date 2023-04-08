@@ -95,6 +95,8 @@ stages:
             --resource-group $(resourceGroupName) \
             --name $(containerInstanceName) \
             --query ipAddress.ports[0].port --output tsv)
+          echo "##vso[task.setvariable variable=container]$container"
+          echo "##vso[task.setvariable variable=port]$port"
           echo "Container URL: http://$container:$port"
 
    
@@ -103,7 +105,10 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Invoke-WebRequest http://20.103.222.196:5000/liveness
+          script: |
+          $container = "$(get_container_ip_and_port.outputs['get_container_ip_and_port.container'])"
+          $port = "$(get_container_ip_and_port.outputs['get_container_ip_and_port.port'])"
+          Invoke-WebRequest "http://$container:$port/liveness"
     continueOnError: false
 
         
