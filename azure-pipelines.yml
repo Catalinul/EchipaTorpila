@@ -103,7 +103,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          Invoke-WebRequest http://$(container):$(port)/liveness
+          Invoke-WebRequest http://20.103.222.196:5000/liveness
     continueOnError: false
 
         
