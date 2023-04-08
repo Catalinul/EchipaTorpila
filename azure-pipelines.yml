@@ -44,6 +44,8 @@ stages:
           $(tag)
 
 - stage: Deploy
+  variables:
+  - group: 'torpila-vg'
   displayName: Deploy stage
   dependsOn: Build
   condition: succeeded()
@@ -70,7 +72,7 @@ stages:
                   --memory 1 \
                   --registry-login-server $(containerRegistry) \
                   --registry-username $(containerRegistryUsername) \
-                  --registry-password $(containerRegistryPassword) \
+                  --registry-password $(rgtorpila-cr-secret) \
                   --dns-name-label mycontainer1998 \
                   --ip-address public --ports 5000
         
