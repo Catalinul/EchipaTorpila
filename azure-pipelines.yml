@@ -105,7 +105,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     variables:
-      containerLocation: $[ dependecies.GetContainerLocation.outputs['setvarStep.containerLocation'] ]
+      containerLocation: $[ dependencies.GetContainerLocation.outputs['setvarStep.containerLocation'] ]
     steps:
     - script: |
         curl -i http://$(dnsLabelName).$(containerLocation).azurecontainer.io:5000/liveness
