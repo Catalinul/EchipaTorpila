@@ -94,7 +94,7 @@ stages:
           scriptLocation: 'inlineScript'
           inlineScript: |
             containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
-            echo "containerLocation is $(contaienrLocation)"
+            echo "containerLocation is $(containerLocation)"
             echo "##vso[task.setvariable variable=containerLocation;isOutput=true]$containerLocation"
       - script: echo $(setvarStep.containerLocation)
         name: echovar
@@ -105,10 +105,10 @@ stages:
     pool:
       vmImage: $(vmImageName)
     variables:
-      containerLocation: $[ dependencies.GetContainerLocation.outputs['setvarStep.containerLocation'] ]
+      containerLocation2: $[ dependencies.GetContainerLocation.outputs['setvarStep.containerLocation'] ]
     steps:
     - script: |
-        curl -i http://$(dnsLabelName).$(containerLocation).azurecontainer.io:5000/liveness
+        curl -i http://$(dnsLabelName).$(containerLocation2).azurecontainer.io:5000/liveness
       displayName: 'Test liveness endpoint'
 
         
