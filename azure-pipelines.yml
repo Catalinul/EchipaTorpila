@@ -108,7 +108,7 @@ stages:
       containerLocation2: $[ dependencies.GetContainerLocation.outputs['aaa4.containerLocation'] ]
     steps:
     - script: |
-        curl -i http://$(dnsLabelName).$(aaa4).azurecontainer.io:5000/liveness
+        curl -i http://$(dnsLabelName).$(containerLocation2).azurecontainer.io:5000/liveness
       displayName: 'Test liveness endpoint'
 
         
