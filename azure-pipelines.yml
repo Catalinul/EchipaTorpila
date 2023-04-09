@@ -87,14 +87,17 @@ stages:
       vmImage: $(vmImageName)
     steps:
       - task: AzureCLI@2
-        displayName: 'Get container location'
+        displayName: 'Get and set container location'
         inputs:
           azureSubscription: $(azureSubscriptionName)
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           inlineScript: |
             containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
-            echo $containerLocation > $(Build.ArtifactStagingDirectory)/containerLocation.txt
+            echo "containerLocation is $(contaienrLocation)"
+            echo "##vso[task.setvariable variable=containerLocation;isOutput=true]$containerLocation"
+      - script: echo $(setvarStep.containerLocation)
+        name: echovar
 
   - job: Test_Liveness
     dependsOn: GetContainerLocation
@@ -102,7 +105,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     variables:
-      containerLocation: $[ fileContents('$(System.DefaultWorkingDirectory)/$(System.StageDisplayName)/containerLocation.txt') ]
+      containerLocation: $[ dependecies.GetContainerLocation.outputs['setvarStep.containerLocation'] ]
     steps:
     - script: |
         curl -i http://$(dnsLabelName).$(containerLocation).azurecontainer.io:5000/liveness
