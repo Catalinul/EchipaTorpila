@@ -19,7 +19,7 @@ variables:
   containerInstanceName: 'container-test'
   dnsLabelName: 'echipa-torpila'
   rg-location: 'westeurope'
-  containerLocation:
+  
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -78,6 +78,9 @@ stages:
 
 - stage: Test
   displayName: Test stage
+  variables:
+  - name: containerLocation
+    value: ''
   dependsOn: Deploy
   condition: succeeded()
   jobs:
