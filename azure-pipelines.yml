@@ -77,9 +77,9 @@ stages:
   displayName: Test stage
   #dependsOn: Deploy
   #condition: succeeded()
-  variables:
-  - name: containerLocation
-    value: ''
+  # variables:
+  # - name: containerLocation
+  #   value: ''
   jobs:
   - job: GetContainerLocation
     displayName: 'Get container location'
