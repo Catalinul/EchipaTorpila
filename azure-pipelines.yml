@@ -96,6 +96,7 @@ stages:
             containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
             echo "##vso[task.setvariable variable=containerLocation;isOutput=true]$containerLocation"
             echo "container location is $containerLocation"
+        name: aaa4
 
 
   - job: Test_Liveness
@@ -104,10 +105,10 @@ stages:
     pool:
       vmImage: $(vmImageName)
     variables:
-      containerLocation2: $[ dependencies.GetContainerLocation.outputs['Get container location.containerLocation'] ]
+      containerLocation2: $[ dependencies.GetContainerLocation.outputs['aaa4.containerLocation'] ]
     steps:
     - script: |
-        curl -i http://$(dnsLabelName).$(containerLocation2).azurecontainer.io:5000/liveness
+        curl -i http://$(dnsLabelName).$(aaa4).azurecontainer.io:5000/liveness
       displayName: 'Test liveness endpoint'
 
         
