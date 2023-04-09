@@ -82,29 +82,11 @@ stages:
     value: ''
   jobs:
   - job: GetContainerLocation
-    displayName: 'Get container location'
-    pool:
-      vmImage: $(vmImageName)
     steps:
-      - task: AzureCLI@2
-        displayName: 'Get container location'
-        inputs:
-          azureSubscription: $(azureSubscriptionName)
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
-            echo "##vso[task.setvariable variable=containerLocation;isOutput=true]$containerLocation"
-      - task: AzureCLI@2
-        name: SetOutputVariable
-        inputs:
-          azureSubscription: $(azureSubscriptionName)
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            echo "##vso[task.setvariable variable=containerLocation]$containerLocation"
-        condition: always()
-        displayName: "Set Output Variable"
+    - script: |
+        containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
+        echo $containerLocation > $(Build.ArtifactStagingDirectory)/containerLocation.txt
+      displayName: 'Get container location'
 
   - job: Test_Liveness
     dependsOn: GetContainerLocation
