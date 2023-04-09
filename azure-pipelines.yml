@@ -22,63 +22,66 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-# - stage: Build
-#   displayName: Build and push stage
-#   jobs:
-#   - job: Build
-#     displayName: Build
-#     pool:
-#       vmImage: $(vmImageName)
-#     steps:
-#     - task: Docker@2
-#       displayName: Build and push an image to container registry
-#       inputs:
-#         command: buildAndPush
-#         repository: $(imageRepository)
-#         dockerfile: $(dockerfilePath)
-#         containerRegistry: $(dockerRegistryServiceConnection)
-#         tags: |
-#           $(tag)
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
 
-# - stage: Deploy
-#   variables:
-#   - group: 'torpila-vg'
-#   displayName: Deploy stage
-#   dependsOn: Build
-#   condition: succeeded()
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: 'container-env'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: AzureCLI@2
-#             displayName: 'Create Azure Container Instance'
-#             inputs:
-#               azureSubscription: $(azureSubscriptionName)
-#               scriptType: 'bash'
-#               scriptLocation: 'inlineScript'
-#               inlineScript: |
-#                 az container create \
-#                   --resource-group $(resourceGroupName) \
-#                   --name $(containerInstanceName) \
-#                   --image $(containerRegistry)/$(imageRepository):$(tag) \
-#                   --cpu 1 \
-#                   --memory 1 \
-#                   --registry-login-server $(containerRegistry) \
-#                   --registry-username $(secret-CRusername) \
-#                   --registry-password $(rgtorpila-cr-secret) \
-#                   --dns-name-label $(dnsLabelName) \
-#                   --ip-address public --ports 5000
+- stage: Deploy
+  variables:
+  - group: 'torpila-vg'
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+
+  - deployment: Deploy
+    displayName: Deploy
+    environment: 'container-env'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            displayName: 'Create Azure Container Instance'
+            inputs:
+              azureSubscription: $(azureSubscriptionName)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az container create \
+                  --resource-group $(resourceGroupName) \
+                  --name $(containerInstanceName) \
+                  --image $(containerRegistry)/$(imageRepository):$(tag) \
+                  --cpu 1 \
+                  --memory 1 \
+                  --registry-login-server $(containerRegistry) \
+                  --registry-username $(secret-CRusername) \
+                  --registry-password $(rgtorpila-cr-secret) \
+                  --dns-name-label $(dnsLabelName) \
+                  --ip-address public --ports 5000
 
 - stage: Test
   displayName: Test stage
-  #dependsOn: Deploy
-  #condition: succeeded()
+  dependsOn: Deploy
+  condition: succeeded()
   jobs:
-  - job: GetContainerLocation
+
+  - job: GetContainerLocation #This job can be easily transofmred to check for the IP adress instead of the FQDN...
     displayName: 'Get container location'
     pool:
       vmImage: $(vmImageName)
