@@ -78,7 +78,8 @@ stages:
   #dependsOn: Deploy
   #condition: succeeded()
   variables:
-    containerLocation: ''
+  - name: containerLocation
+    value: ''
   jobs:
   - job: GetContainerLocation
     displayName: 'Get container location'
@@ -86,7 +87,7 @@ stages:
       vmImage: $(vmImageName)
     steps:
       - task: AzureCLI@2
-        displayName: 'Get and set container location'
+        displayName: 'Get container location'
         inputs:
           azureSubscription: $(azureSubscriptionName)
           scriptType: 'bash'
@@ -94,8 +95,8 @@ stages:
           inlineScript: |
             containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
             echo "##vso[task.setvariable variable=containerLocation;isOutput=true]$containerLocation"
-      - script: echo $(containerLocation)
-        name: echovar
+            echo "container location is $containerLocation"
+
 
   - job: Test_Liveness
     dependsOn: GetContainerLocation
