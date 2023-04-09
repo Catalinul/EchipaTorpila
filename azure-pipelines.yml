@@ -78,7 +78,7 @@ stages:
   #dependsOn: Deploy
   #condition: succeeded()
   variables:
-    containerLocation: 
+    containerLocation: ''
   jobs:
   - job: GetContainerLocation
     displayName: 'Get container location'
@@ -93,9 +93,8 @@ stages:
           scriptLocation: 'inlineScript'
           inlineScript: |
             containerLocation=$(az container show --resource-group $(resourceGroupName) --name $(containerInstanceName) --query location -o tsv)
-            echo "containerLocation is $(containerLocation)"
             echo "##vso[task.setvariable variable=containerLocation;isOutput=true]$containerLocation"
-      - script: echo $(setvarStep.containerLocation)
+      - script: echo $(containerLocation)
         name: echovar
 
   - job: Test_Liveness
