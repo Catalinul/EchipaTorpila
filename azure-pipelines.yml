@@ -84,7 +84,7 @@ stages:
     displayName: Deploy to AKS
     pool:
       vmImage: $(vmImageName)
-    environment: 'default' #customize with your environment
+    environment: 'k8s-env' #customize with your environment
     strategy:
       runOnce:
         deploy:
