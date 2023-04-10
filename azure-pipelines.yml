@@ -13,6 +13,7 @@ variables:
   azureSubscriptionName: 'svc-torpila'
   resourceGroupName: 'resourcegroup-test'
   containerInstanceName: 'container-test'
+  containerPort: '5000'
   dnsLabelName: 'echipa-torpila'
   vmImageName: 'ubuntu-latest'
   k8sNamespace: 'aks-torpila-ns'
@@ -73,7 +74,7 @@ stages:
                   --registry-username $(secret-CRusername) \
                   --registry-password $(rgtorpila-cr-secret) \
                   --dns-name-label $(dnsLabelName) \
-                  --ip-address public --ports 5000
+                  --ip-address public --ports $(containerPort)
 
 
 
@@ -101,9 +102,9 @@ stages:
               manifests: |
                 $(System.ArtifactsDirectory)/manifest/deployment.yml
                 $(System.ArtifactsDirectory)/manifest/service.yml
+              #The line below overwrites what I have in repo/manifest/deployment.yml
               containers: '$(containerRegistry)/$(imageRepository):$(tag)'
-              #I created this using "kubectl create secret docker-registry" in azure CLI
-              imagePullSecrets: '$(acr-secret)'
+              imagePullSecrets: '$(acr-secret)' #I created this using "kubectl create secret docker-registry" in azure CLI
 
 
 - stage: Test
@@ -140,7 +141,7 @@ stages:
       containerLocation: $[ dependencies.GetContainerLocation.outputs['containerLocTask.containerLocation'] ]
     steps:
     - script: |
-        curl -i http://$(dnsLabelName).$(containerLocation).azurecontainer.io:5000/liveness
+        curl -i http://$(dnsLabelName).$(containerLocation).azurecontainer.io:$(containerPort)/liveness
       displayName: 'Test liveness endpoint'
 
         
