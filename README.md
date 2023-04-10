@@ -22,7 +22,7 @@ flask run
 
 ### Test the application
 
-to be continued
+PostMan can be used to test the delete/post/put/get methods on the flask app
 
 
 ### Run the app in a docker container
@@ -30,18 +30,27 @@ to be continued
 pipeline.py can be used to build/build/push/deploy/test the application with Docker.
 You can use it in the following ways:
 
+Build the image
 ```commandline
-python pipeline.py BUILD --dockerFilePath=<arg1> --imageName=<arg2> --imageTag=<arg3>
+python pipeline.py build --dockerFilePath=<arg1> --imageName=<arg2> --imageTag=<arg3>
 ```
 
+Push the image on DockerHub
 ```commandline
-python pipeline.py DEPLOY --flavour=[docker/kubernetes] --imageName=<arg2> --imageTag=<arg3>
+python pipeline.py push --containerRegistryUsername=<arg1> --imageName=<arg2> --imageTag=<arg3>
 ```
+Deploy the Flask app using docker
+```commandline
+python pipeline.py deploy --flavour=docker --imageName=<arg2> --imageTag=<arg3>
+```
+Deploy the Flask app using kubernetes.
+For this step you need to run this command twice, one for the deployment.yaml, one for the service.yaml
 
 ```commandline
-python pipeline.py PUSH --containerRegistryUsername=<arg1> --imageName=<arg2> --imageTag=<arg3>
+python pipeline.py deploy --flavour=kubernetes --deploymentManifest=<arg1> --imageName=<arg2> --imageTag=<arg3>
 ```
+Test the endpoint
 
 ```commandline
-python pipeline.py TEST --endpoint=<URL>
+python pipeline.py test --endpoint=<URL>
 ```
