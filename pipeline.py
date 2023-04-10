@@ -23,6 +23,7 @@ parser.add_argument('--containerRegistryUsername', required=False, help=' Userna
 
 #Deploy arguments
 parser.add_argument('--flavour', required=False, choices=['docker', 'kubernetes'], help='Containers or clusters?')
+parser.add_argument('--deploymentManifest',required=False, help='Getting the .yaml files' )
 
 #Test arguments
 parser.add_argument('--endpoint', required=False, help='URL of the endpoint to test using CURL.')
@@ -44,12 +45,13 @@ elif args.command == 'push':
 
 elif args.command == 'deploy':
     flavour = args.flavour
+    deploy_manifest= args.deploymentManifest
     image_name = args.imageName
     image_tag = args.imageTag
     if flavour == 'docker':
         subprocess.run(['docker', 'run', '-d', '-p', '5050:5000', f"{image_name}:{image_tag}"])
     elif flavour == 'kubernetes':
-        # TBD
+        subprocess.run(['minikube', 'kubectl', '--', 'apply', '-f', deploy_manifest])
         pass
 
 elif args.command == 'test':
