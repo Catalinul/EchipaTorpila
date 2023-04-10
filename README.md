@@ -24,6 +24,20 @@ flask run
 
 PostMan can be used to test the delete/post/put/get methods on the flask app
 
+#### GET
+Create a request for the GET method to fetch all the fruits. Set the URL as http://localhost:5000/fruit/ and set the method to GET.
+Create a request for the GET method to fetch a specific fruit by ID. Set the URL as http://localhost:5000/fruit/1 where 1 is the ID of the fruit you want to retrieve. Set the method to GET.
+
+#### POST
+
+Create a request for the POST method to add a new fruit. Set the URL as http://localhost:5000/fruit/ and set the method to POST. Set the body of the request to be a JSON object containing the details of the new fruit.
+
+#### PUT
+Create a request for the PUT method to update a fruit by ID. Set the URL as http://localhost:5000/fruit/1 where 1 is the ID of the fruit you want to update. Set the method to PUT. Set the body of the request to be a JSON object containing the updated details of the fruit.
+
+#### DELETE
+Create a request for the DELETE method to delete a fruit by ID. Set the URL as http://localhost:5000/fruit/1 where 1 is the ID of the fruit you want to delete. Set the method to DELETE.
+
 
 ### Run the app in a docker container
 
