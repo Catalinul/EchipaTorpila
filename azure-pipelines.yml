@@ -20,7 +20,7 @@ variables:
   dnsLabelName: 'echipa-torpila'
   rg-location: 'westeurope'
   vmImageName: 'ubuntu-latest'
-  k8sNamespace: 'aks-torpila'
+  k8sNamespace: 'aks-torpila-ns'
 
 stages:
 - stage: Build
