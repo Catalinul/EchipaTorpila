@@ -39,7 +39,7 @@ Create a request for the PUT method to update a fruit by ID. Set the URL as http
 Create a request for the DELETE method to delete a fruit by ID. Set the URL as http://localhost:5000/fruit/1 where 1 is the ID of the fruit you want to delete. Set the method to DELETE.
 
 
-### Run the app in a docker container
+### Run the app in a docker container or Kubernetes cluster
 
 pipeline.py can be used to build/build/push/deploy/test the application with Docker.
 You can use it in the following ways:
