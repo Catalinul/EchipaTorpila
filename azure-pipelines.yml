@@ -83,7 +83,7 @@ stages:
     displayName: Deploy to AKS
     pool:
       vmImage: $(vmImageName)
-    environment: 'myenv.default' #customize with your environment
+    environment: 'default' #customize with your environment
     strategy:
       runOnce:
         deploy:
