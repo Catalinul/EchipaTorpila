@@ -41,7 +41,8 @@ elif args.command == 'push':
     image_name = args.imageName
     image_tag = args.imageTag
     subprocess.run(['docker', 'login', '-u', container_registry_username])
-    subprocess.run(['docker', 'push', f"{image_name}:{image_tag}"])
+    subprocess.run(['docker', 'image', 'tag', f"{image_name}:{image_tag}", f"{container_registry_username}/{image_name}:{image_tag}"])
+    subprocess.run(['docker', 'push', f"{container_registry_username}/{image_name}:{image_tag}"])
 
 elif args.command == 'deploy':
     flavour = args.flavour
