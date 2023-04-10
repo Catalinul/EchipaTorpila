@@ -43,7 +43,7 @@ stages:
     - task: PublishPipelineArtifact@1
       inputs:
         artifactName: 'manifests'
-        path: 'manifests'
+        path: 'manifest'
 
 - stage: Deploy
   variables:
@@ -90,8 +90,8 @@ stages:
           steps:
           - task: DownloadPipelineArtifact@2
             inputs:
-              artifactName: 'manifest'
-              downloadPath: '$(System.ArtifactsDirectory)/manifest'
+              artifactName: 'manifests'
+              downloadPath: '$(System.ArtifactsDirectory)/manifests'
 
           - task: KubernetesManifest@0
             displayName: Create imagePullSecret
