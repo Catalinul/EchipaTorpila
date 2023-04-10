@@ -40,6 +40,10 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+    - task: PublishPipelineArtifact@1
+      inputs:
+        artifactName: 'manifests'
+        path: 'manifests'
 
 - stage: Deploy
   variables:
@@ -50,7 +54,7 @@ stages:
   jobs:
 
   - deployment: Deploy
-    displayName: Deploy
+    displayName: Deploy to ACI
     environment: 'container-env'
     strategy:
       runOnce:
@@ -74,6 +78,42 @@ stages:
                   --registry-password $(rgtorpila-cr-secret) \
                   --dns-name-label $(dnsLabelName) \
                   --ip-address public --ports 5000
+
+  - deployment: Deploy
+    displayName: Deploy to AKS
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'myenv.aksnamespace' #customize with your environment
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              artifactName: 'manifest'
+              downloadPath: '$(System.ArtifactsDirectory)/manifest'
+
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              namespace: $(k8sNamespace)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              namespace: $(k8sNamespace)
+              manifests: |
+                $(System.ArtifactsDirectory)/manifests/deployment.yml
+                $(System.ArtifactsDirectory)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
 
 - stage: Test
   displayName: Test stage
