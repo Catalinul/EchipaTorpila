@@ -66,7 +66,7 @@ def fruit():
     fruits.append(data)
     with open(DATA_FILE_PATH, 'w') as f:
         json.dump(fruits, f)
-    return jsonify({'message': f'Fruit {len(fruits)+1} added successfully'})
+    return jsonify({'message': 'Fruit added successfully'})
 
 
 @app.route('/fruit/<int:id>', methods=['PUT'])
