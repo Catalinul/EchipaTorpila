@@ -53,7 +53,7 @@ stages:
   condition: succeeded()
   jobs:
 
-  - deployment: Deploy
+  - deployment: Deploy-ACI
     displayName: Deploy to ACI
     environment: 'container-env'
     strategy:
@@ -79,7 +79,7 @@ stages:
                   --dns-name-label $(dnsLabelName) \
                   --ip-address public --ports 5000
 
-  - deployment: Deploy
+  - deployment: Deploy-AKS
     displayName: Deploy to AKS
     pool:
       vmImage: $(vmImageName)
