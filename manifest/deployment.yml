@@ -16,5 +16,5 @@ spec:
       - name: my-flask-app
         image: stanflorina/flask-app:latest
         ports:
-        - containerPort: 5050
+        - containerPort: 5000
 
